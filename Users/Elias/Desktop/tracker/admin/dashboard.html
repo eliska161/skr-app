@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adminpanel - Ordreadministrasjon</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="bi bi-box-seam me-2"></i>Ordreadministrasjon
+            </a>
+            <button id="logoutBtn" class="btn btn-outline-light ms-auto">
+                <i class="bi bi-box-arrow-right me-2"></i>Logg ut
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h1 class="h3">Administrer bestillinger</h1>
+                <p class="text-muted">Legg til, oppdater eller slett bestillinger</p>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newOrderModal">
+                    <i class="bi bi-plus-circle me-2"></i>Legg til ny ordre
+                </button>
+            </div>
+        </div>
+
+        <!-- Orders List -->
+        <div class="row" id="ordersList">
+            <!-- Orders will be loaded here dynamically -->
+            <div class="col-12 text-center py-5" id="noOrdersMessage">
+                <i class="bi bi-inbox display-1 text-muted"></i>
+                <p class="h5 mt-3 text-muted">Ingen bestillinger funnet</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Order Modal -->
+    <div class="modal fade" id="newOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Legg til ny ordre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newOrderForm">
+                        <div class="mb-3">
+                            <label for="orderName" class="form-label">Kundenavn</label>
+                            <input type="text" class="form-control" id="orderName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderEmail" class="form-label">E-postadresse</label>
+                            <input type="email" class="form-control" id="orderEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="receiptNumber" class="form-label">Kvitteringsnummer</label>
+                            <input type="text" class="form-control" id="receiptNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderStatus" class="form-label">Status</label>
+                            <select class="form-select" id="orderStatus" required>
+                                <option value="received">Bestilling mottatt</option>
+                                <option value="production">Produksjon igangsatt</option>
+                                <option value="shipped">Ordre sendt</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="orderComment" class="form-label">Kommentar (valgfritt)</label>
+                            <textarea class="form-control" id="orderComment" rows="2"></textarea>
+                        </div>
+                        
+                        <div id="shippingFieldsContainer" class="d-none">
+                            <div class="mb-3">
+                                <label for="trackingNumber" class="form-label">Sporingsnummer</label>
+                                <input type="text" class="form-control" id="trackingNumber">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="zipCode" class="form-label">Postnummer</label>
+                                        <input type="text" class="form-control" id="zipCode">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">By</label>
+                                        <input type="text" class="form-control" id="city">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="saveNewOrderBtn">Lagre</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div class="modal fade" id="editOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rediger ordre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOrderForm">
+                        <input type="hidden" id="editOrderId">
+                        <div class="mb-3">
+                            <label for="editOrderName" class="form-label">Kundenavn</label>
+                            <input type="text" class="form-control" id="editOrderName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderEmail" class="form-label">E-postadresse</label>
+                            <input type="email" class="form-control" id="editOrderEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editReceiptNumber" class="form-label">Kvitteringsnummer</label>
+                            <input type="text" class="form-control" id="editReceiptNumber" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="saveEditOrderBtn">Lagre endringer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div class="modal fade" id="updateStatusModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Oppdater ordrestatus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateStatusForm">
+                        <input type="hidden" id="statusOrderId">
+                        <div class="mb-3">
+                            <label for="updateOrderStatus" class="form-label">Status</label>
+                            <select class="form-select" id="updateOrderStatus" required>
+                                <option value="received">Bestilling mottatt</option>
+                                <option value="production">Produksjon igangsatt</option>
+                                <option value="shipped">Ordre sendt</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="updateOrderComment" class="form-label">Kommentar (valgfritt)</label>
+                            <textarea class="form-control" id="updateOrderComment" rows="2"></textarea>
+                        </div>
+                        
+                        <div id="updateShippingFieldsContainer" class="d-none">
+                            <div class="mb-3">
+                                <label for="updateTrackingNumber" class="form-label">Sporingsnummer</label>
+                                <input type="text" class="form-control" id="updateTrackingNumber">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="updateZipCode" class="form-label">Postnummer</label>
+                                        <input type="text" class="form-control" id="updateZipCode">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="updateCity" class="form-label">By</label>
+                                        <input type="text" class="form-control" id="updateCity">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                    <button type="button" class="btn btn-primary" id="saveStatusBtn">Oppdater status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        // Check if admin is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            loadOrders();
+            
+            // Toggle shipping fields based on status selection
+            document.getElementById('orderStatus').addEventListener('change', function() {
+                toggleShippingFields('orderStatus', 'shippingFieldsContainer');
+            });
+            
+            document.getElementById('updateOrderStatus').addEventListener('change', function() {
+                toggleShippingFields('updateOrderStatus', 'updateShippingFieldsContainer');
+            });
+        });
+        
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            sessionStorage.removeItem('adminLoggedIn');
+            window.location.href = 'index.html';
+        });
+        
+        // Save new order
+        document.getElementById('saveNewOrderBtn').addEventListener('click', function() {
+            const name = document.getElementById('orderName').value.trim();
+            const email = document.getElementById('orderEmail').value.trim();
+            const receiptNumber = document.getElementById('receiptNumber').value.trim();
+            const status = document.getElementById('orderStatus').value;
+            const comment = document.getElementById('orderComment').value.trim();
+            
+            if (!name || !email || !receiptNumber) {
+                alert('Vennligst fyll ut alle påkrevde felt.');
+                return;
+            }
+            
+            const newOrder = {
+                id: generateId(),
+                name: name,
+                email: email,
+                receiptNumber: receiptNumber,
+                status: status,
+                comment: comment,
+                receivedDate: new Date().toISOString()
+            };
+            
+            // Add date based on status
+            if (status === 'production') {
+                newOrder.productionDate = new Date().toISOString();
+            } else if (status === 'shipped') {
+                newOrder.productionDate = new Date().toISOString();
+                newOrder.shippedDate = new Date().toISOString();
+                
+                // Add shipping details if status is shipped
+                newOrder.trackingNumber = document.getElementById('trackingNumber').value.trim();
+                newOrder.zipCode = document.getElementById('zipCode').value.trim();
+                newOrder.city = document.getElementById('city').value.trim();
+            }
+            
+            // Save order to localStorage
+            const orders = getAllOrders();
+            orders.push(newOrder);
+            localStorage.setItem('orderData', JSON.stringify(orders));
+            
+            // Close modal and reload orders
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newOrderModal'));
+            modal.hide();
+            document.getElementById('newOrderForm').reset();
+            
+            loadOrders();
+        });
+        
+        // Save edited order
+        document.getElementById('saveEditOrderBtn').addEventListener('click', function() {
+            const orderId = document.getElementById('editOrderId').value;
+            const name = document.getElementById('editOrderName').value.trim();
+            const email = document.getElementById('editOrderEmail').value.trim();
+            const receiptNumber = document.getElementById('editReceiptNumber').value.trim();
+            
+            if (!name || !email || !receiptNumber) {
+                alert('Vennligst fyll ut alle påkrevde felt.');
+                return;
+            }
+            
+            const orders = getAllOrders();
+            const orderIndex = orders.findIndex(order => order.id === orderId);
+            
+            if (orderIndex !== -1) {
+                orders[orderIndex].name = name;
+                orders[orderIndex].email = email;
+                orders[orderIndex].receiptNumber = receiptNumber;
+                
+                localStorage.setItem('orderData', JSON.stringify(orders));
+                
+                // Close modal and reload orders
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editOrderModal'));
+                modal.hide();
+                
+                loadOrders();
+            }
+        });
+        
+        // Save status update
+        document.getElementById('saveStatusBtn').addEventListener('click', function() {
+            const orderId = document.getElementById('statusOrderId').value;
+            const status = document.getElementById('updateOrderStatus').value;
+            const comment = document.getElementById('updateOrderComment').value.trim();
+            
+            const orders = getAllOrders();
+            const orderIndex = orders.findIndex(order => order.id === orderId);
+            
+            if (orderIndex !== -1) {
+                const order = orders[orderIndex];
+                const oldStatus = order.status;
+                
+                order.status = status;
+                
+                if (comment) {
+                    order.comment = comment;
+                }
+                
+                // Update dates based on status changes
+                if (status === 'production' && !order.productionDate) {
+                    order.productionDate = new Date().toISOString();
+                } else if (status === 'shipped') {
+                    if (!order.productionDate) {
+                        order.productionDate = new Date().toISOString();
+                    }
+                    if (!order.shippedDate) {
+                        order.shippedDate = new Date().toISOString();
+                    }
+                    
+                    // Add shipping details if status is shipped
+                    order.trackingNumber = document.getElementById('updateTrackingNumber').value.trim();
+                    order.zipCode = document.getElementById('updateZipCode').value.trim();
+                    order.city = document.getElementById('updateCity').value.trim();
+                }
+                
+                localStorage.setItem('orderData', JSON.stringify(orders));
+                
+                // Close modal and reload orders
+                const modal = bootstrap.Modal.getInstance(document.getElementById('updateStatusModal'));
+                modal.hide();
+                
+                loadOrders();
+            }
+        });
+        
+        function loadOrders() {
+            const orders = getAllOrders();
+            const ordersList = document.getElementById('ordersList');
+            const noOrdersMessage = document.getElementById('noOrdersMessage');
+            
+            // Clear current orders
+            ordersList.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersList.appendChild(noOrdersMessage);
+                return;
+            }
+            
+            // Sort orders by date (newest first)
+            orders.sort((a, b) => new Date(b.receivedDate) - new Date(a.receivedDate));
+            
+            orders.forEach(order => {
+                const orderCard = createOrderCard(order);
+                ordersList.appendChild(orderCard);
+            });
+        }
+        
+        function createOrderCard(order) {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-4 mb-4';
+            
+            let statusBadge = '';
+            switch (order.status) {
+                case 'received':
+                    statusBadge = '<span class="badge bg-info">Bestilling mottatt</span>';
+                    break;
+                case 'production':
+                    statusBadge = '<span class="badge bg-warning">Produksjon igangsatt</span>';
+                    break;
+                case 'shipped':
+                    statusBadge = '<span class="badge bg-success">Ordre sendt</span>';
+                    break;
+            }
+            
+            col.innerHTML = `
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">${order.name}</h5>
+                        ${statusBadge}
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Kvitteringsnr:</strong> ${order.receiptNumber}</p>
+                        <p><strong>E-post:</strong> ${order.email}</p>
+                        <p><strong>Dato:</strong> ${formatDate(order.receivedDate)}</p>
+                        ${order.comment ? `<p><strong>Kommentar:</strong> ${order.comment}</p>` : ''}
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-sm btn-primary update-status-btn" data-id="${order.id}">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Oppdater status
+                            </button>
+                            <div>
+                                <button class="btn btn-sm btn-secondary edit-order-btn" data-id="${order.id}">
+                                    <i class="bi bi-pencil me-1"></i>Rediger
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-order-btn" data-id="${order.id}">
+                                    <i class="bi bi-trash me-1"></i>Slett
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to buttons
+            setTimeout(() => {
+                const updateBtn = col.querySelector('.update-status-btn');
+                const editBtn = col.querySelector('.edit-order-btn');
+                const deleteBtn = col.querySelector('.delete-order-btn');
+                
+                updateBtn.addEventListener('click', () => openUpdateStatusModal(order.id));
+                editBtn.addEventListener('click', () => openEditOrderModal(order.id));
+                deleteBtn.addEventListener('click', () => deleteOrder(order.id));
+            }, 0);
+            
+            return col;
+        }
+        
+        function openUpdateStatusModal(orderId) {
+            const order = getOrderById(orderId);
+            
+            if (order) {
+                document.getElementById('statusOrderId').value = order.id;
+                document.getElementById('updateOrderStatus').value = order.status;
+                document.getElementById('updateOrderComment').value = order.comment || '';
+                
+                // Fill shipping fields if they exist
+                if (order.trackingNumber) {
+                    document.getElementById('updateTrackingNumber').value = order.trackingNumber;
+                }
+                
+                if (order.zipCode) {
+                    document.getElementById('updateZipCode').value = order.zipCode;
+                }
+                
+                if (order.city) {
+                    document.getElementById('updateCity').value = order.city;
+                }
+                
+                // Show/hide shipping fields based on status
+                toggleShippingFields('updateOrderStatus', 'updateShippingFieldsContainer');
+                
+                const modal = new bootstrap.Modal(document.getElementById('updateStatusModal'));
+                modal.show();
+            }
+        }
+        
+        function openEditOrderModal(orderId) {
+            const order = getOrderById(orderId);
+            
+            if (order) {
+                document.getElementById('editOrderId').value = order.id;
+                document.getElementById('editOrderName').value = order.name;
+                document.getElementById('editOrderEmail').value = order.email;
+                document.getElementById('editReceiptNumber').value = order.receiptNumber;
+                
+                const modal = new bootstrap.Modal(document.getElementById('editOrderModal'));
+                modal.show();
+            }
+        }
+        
+        function deleteOrder(orderId) {
+            if (confirm('Er du sikker på at du vil slette denne bestillingen?')) {
+                const orders = getAllOrders();
+                const updatedOrders = orders.filter(order => order.id !== orderId);
+                
+                localStorage.setItem('orderData', JSON.stringify(updatedOrders));
+                loadOrders();
+            }
+        }
+        
+        function toggleShippingFields(selectId, containerId) {
+            const status = document.getElementById(selectId).value;
+            const container = document.getElementById(containerId);
+            
+            if (status === 'shipped') {
+                container.classList.remove('d-none');
+            } else {
+                container.classList.add('d-none');
+            }
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('no-NO');
+        }
+    </script>
+</body>
+</html>
