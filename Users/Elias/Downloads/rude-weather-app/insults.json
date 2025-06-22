@@ -1,0 +1,71 @@
+{
+  "hot": [
+    {"text":"Jesus Christ, it’s fucking hot. Did you forget what air conditioning is?","audio":"audio/hot1.mp3"},
+    {"text":"It’s 25 degrees and you’re still not outside? Dumbass.","audio":"audio/hot2.mp3"},
+    {"text":"You’re melting like an idiot. Get inside.","audio":"audio/hot3.mp3"},
+    {"text":"Hot enough to fry your brain, moron.","audio":"audio/hot4.mp3"},
+    {"text":"You’re sweating like a damn pig in a sauna. Get a grip!","audio":"audio/hot5.mp3"},
+    {"text":"Is your brain melting too, or just your face?","audio":"audio/hot6.mp3"},
+    {"text":"Go inside before you fry yourself into a crispy snack.","audio":"audio/hot7.mp3"}
+  ],
+  "cold": [
+    {"text":"It’s freezing, dumbass. Put on a goddamn jacket.","audio":"audio/cold1.mp3"},
+    {"text":"Winter’s here to kick your ass again.","audio":"audio/cold2.mp3"},
+    {"text":"You look like a popsicle, idiot.","audio":"audio/cold3.mp3"},
+    {"text":"Cold enough to freeze your stupidity.","audio":"audio/cold4.mp3"},
+    {"text":"You look like a frozen popsicle. Defrost your dumb ass.","audio":"audio/cold5.mp3"},
+    {"text":"Put on some clothes, or you’ll catch stupid cold.","audio":"audio/cold6.mp3"},
+    {"text":"Cold enough to freeze your brain cells. No wonder you’re slow.","audio":"audio/cold7.mp3"}
+  ],
+  "rainy": [
+    {"text":"Oh look, more fucking rain. What did you do to piss off the weather gods?","audio":"audio/rain1.mp3"},
+    {"text":"Get used to looking like a drowned rat, because that’s your life now.","audio":"audio/rain2.mp3"},
+    {"text":"Rain again? You’re cursed, buddy.","audio":"audio/rain3.mp3"},
+    {"text":"Umbrella? Ha! You’ll still get wet, dumbass.","audio":"audio/rain4.mp3"},
+    {"text":"Rain again? You must have pissed off the weather gods real bad.","audio":"audio/rain5.mp3"},
+    {"text":"Go get a bucket, because you’re about to drown in your own bad luck.","audio":"audio/rain6.mp3"},
+    {"text":"Umbrella won’t save you from this watery hell, genius.","audio":"audio/rain7.mp3"}
+  ],
+  "perfect": [
+    {"text":"Holy shit, a decent day? Did you win the lottery or something?","audio":"audio/perfect1.mp3"},
+    {"text":"Even the weather’s tired of your bullshit and cut you some slack today.","audio":"audio/perfect2.mp3"},
+    {"text":"Enjoy the rare nice weather, dumbass.","audio":"audio/perfect3.mp3"},
+    {"text":"Don’t get used to it, it’s a trap.","audio":"audio/perfect4.mp3"},
+    {"text":"A good day? What kind of witchcraft is this?","audio":"audio/perfect5.mp3"},
+    {"text":"Enjoy this day of mercy before the world shits on you again.","audio":"audio/perfect6.mp3"},
+    {"text":"Nice weather? Yeah, right. Don’t get used to it, dumbass.","audio":"audio/perfect7.mp3"}
+  ],
+  "cityErrors": [
+    {"text":"Are you kidding me? That city doesn't exist, genius.","audio":"audio/error_city1.mp3"},
+    {"text":"Nope, can’t find that place. Maybe try a real city?","audio":"audio/error_city2.mp3"},
+    {"text":"That city? Never heard of it, and I’m the smart one here.","audio":"audio/error_city3.mp3"}
+  ],
+  "locationErrors": [
+    {"text":"Location access denied? Typical.","audio":"audio/error_location1.mp3"},
+    {"text":"You blocked location? What, scared of fresh air?","audio":"audio/error_location2.mp3"},
+    {"text":"You blocked location? What, scared of the outdoors?","audio":"audio/error_location3.mp3"}
+  ],
+  "genericErrors": [
+    {"text":"I can’t do magic, type a real place next time.","audio":"audio/error_generic1.mp3"},
+    {"text":"Wrong input again? You’re hopeless.","audio":"audio/error_generic2.mp3"},
+    {"text":"Did you even try? Because it doesn’t look like it.","audio":"audio/error_generic3.mp3"},
+    {"text":"Can’t find that place, maybe check a map before you type.","audio":"audio/error_generic4.mp3"}
+  ],
+  "easterEggs": {
+    "skyrden": {
+      "text": "ermh what in the skieerden is this? you found a secret place, idiot",
+      "image": "images/skyrden.png",
+      "audio": "audio/skierden.mp3"
+    },
+    "shero's home": {
+      "text": "hai shero welcoem",
+      "image": "images/shero.png",
+      "audio": "audio/hi.mp3"
+    },
+    "anno's home": {
+      "text": "hiya anno welcome how are you",
+      "image": "images/anno.png",
+      "audio": "audio/hi.mp3"
+    }
+  }
+}
